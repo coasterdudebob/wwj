@@ -1,0 +1,86 @@
+@model IEnumerable<WagerWiseJournal.Models.BettingSession>
+@{
+    ViewData["Title"] = "My Betting Sessions";
+}
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>@ViewData["Title"]</h1>
+        <div>
+            <a asp-action="Active" class="btn btn-success">
+                <i class="bi bi-play-circle"></i> Active Session
+            </a>
+            <a asp-action="Create" class="btn btn-primary">
+                <i class="bi bi-plus-circle"></i> New Session
+            </a>
+        </div>
+    </div>
+
+    @if (Model != null && Model.Any())
+    {
+        <div class="row">
+            @foreach (var session in Model)
+            {
+                <div class="col-md-6 mb-3">
+                    <div class="card @(session.IsActive ? "border-success" : "")">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h5 class="mb-0">
+                                @session.Casino.Name
+                                @if (session.IsActive)
+                                {
+                                    <span class="badge bg-success">Active</span>
+                                }
+                            </h5>
+                            <small class="text-muted">@session.StartTime.ToString("MMM dd, yyyy")</small>
+                        </div>
+                        <div class="card-body">
+                            <dl class="row mb-0">
+                                <dt class="col-sm-4">Started</dt>
+                                <dd class="col-sm-8">@session.StartTime.ToString("g")</dd>
+                                
+                                @if (session.EndTime.HasValue)
+                                {
+                                    <dt class="col-sm-4">Ended</dt>
+                                    <dd class="col-sm-8">@session.EndTime.Value.ToString("g")</dd>
+                                    
+                                    <dt class="col-sm-4">Duration</dt>
+                                    <dd class="col-sm-8">@((session.EndTime.Value - session.StartTime).TotalHours.ToString("F1")) hours</dd>
+                                }
+                                
+                                <dt class="col-sm-4">Total Bets</dt>
+                                <dd class="col-sm-8">@session.Bets.Count</dd>
+                                
+                                <dt class="col-sm-4">Wagered</dt>
+                                <dd class="col-sm-8">$@session.TotalWagered.ToString("N2")</dd>
+                                
+                                <dt class="col-sm-4">Winnings</dt>
+                                <dd class="col-sm-8">$@session.TotalWinnings.ToString("N2")</dd>
+                                
+                                <dt class="col-sm-4">Net</dt>
+                                <dd class="col-sm-8">
+                                    <strong class="@(session.NetProfit >= 0 ? "text-success" : "text-danger")">
+                                        $@session.NetProfit.ToString("N2")
+                                    </strong>
+                                </dd>
+                            </dl>
+                            
+                            <div class="d-grid gap-2 mt-3">
+                                <a asp-action="Details" asp-route-id="@session.Id" class="btn btn-primary">
+                                    View Details
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-info">
+            <h4>No Sessions Yet</h4>
+            <p>Start tracking your casino visits by creating your first betting session.</p>
+            <a asp-action="Create" class="btn btn-primary">Create Your First Session</a>
+        </div>
+    }
+</div>
