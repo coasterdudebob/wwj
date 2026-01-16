@@ -1,0 +1,100 @@
+@model IEnumerable<WagerWiseJournal.Models.Casino>
+@{
+    ViewData["Title"] = "Casinos";
+}
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>@ViewData["Title"]</h1>
+        <a asp-action="Create" class="btn btn-success">
+            <i class="bi bi-plus-circle"></i> Add New Casino
+        </a>
+    </div>
+
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Find Nearby Casinos</h5>
+                    <button id="findNearby" class="btn btn-primary">
+                        <i class="bi bi-geo-alt"></i> Use My Location
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        @if (Model != null && Model.Any())
+        {
+            @foreach (var casino in Model)
+            {
+                <div class="col-md-4 mb-3">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title">@casino.Name</h5>
+                            <p class="card-text">
+                                @if (!string.IsNullOrEmpty(casino.Address))
+                                {
+                                    <span>@casino.Address</span><br />
+                                }
+                                @if (!string.IsNullOrEmpty(casino.City) && !string.IsNullOrEmpty(casino.State))
+                                {
+                                    <span>@casino.City, @casino.State @casino.ZipCode</span><br />
+                                }
+                                @if (!string.IsNullOrEmpty(casino.Country))
+                                {
+                                    <span>@casino.Country</span>
+                                }
+                            </p>
+                            <div class="d-grid gap-2">
+                                <a asp-action="Details" asp-route-id="@casino.Id" class="btn btn-sm btn-primary">
+                                    View Details
+                                </a>
+                                <a asp-action="Edit" asp-route-id="@casino.Id" class="btn btn-sm btn-secondary">
+                                    Edit
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <div class="col-12">
+                <div class="alert alert-info">
+                    <p class="mb-0">No casinos found. <a asp-action="Create">Add your first casino</a>.</p>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.getElementById('findNearby')?.addEventListener('click', function() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    const lat = position.coords.latitude;
+                    const lon = position.coords.longitude;
+                    
+                    fetch(`/Casino/GetNearby?latitude=${lat}&longitude=${lon}&radiusKm=50`)
+                        .then(response => response.json())
+                        .then(data => {
+                            alert(`Found ${data.length} nearby casinos`);
+                            console.log(data);
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                            alert('Error finding nearby casinos');
+                        });
+                }, function(error) {
+                    alert('Error getting your location: ' + error.message);
+                });
+            } else {
+                alert('Geolocation is not supported by your browser');
+            }
+        });
+    </script>
+}

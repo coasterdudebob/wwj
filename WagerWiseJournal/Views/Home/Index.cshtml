@@ -1,8 +1,119 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Home";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="container">
+    <div class="jumbotron text-center bg-light p-5 rounded-3 mb-5">
+        <h1 class="display-4"><i class="bi bi-dice-5"></i> Wager Wise Journal</h1>
+        <p class="lead">Your personal casino bet tracking companion - Cross-platform, secure, and easy to use</p>
+        <hr class="my-4">
+        <p>Track your betting sessions, analyze your performance, and make smarter decisions at the casino</p>
+        @if (User.Identity?.IsAuthenticated == true)
+        {
+            <a class="btn btn-primary btn-lg me-2" asp-controller="Session" asp-action="Active" role="button">
+                <i class="bi bi-play-circle"></i> Active Session
+            </a>
+            <a class="btn btn-success btn-lg" asp-controller="Session" asp-action="Create" role="button">
+                <i class="bi bi-plus-circle"></i> New Session
+            </a>
+        }
+        else
+        {
+            <a class="btn btn-primary btn-lg me-2" asp-controller="Account" asp-action="Register" role="button">
+                <i class="bi bi-person-plus"></i> Get Started
+            </a>
+            <a class="btn btn-outline-primary btn-lg" asp-controller="Account" asp-action="Login" role="button">
+                <i class="bi bi-box-arrow-in-right"></i> Login
+            </a>
+        }
+    </div>
+
+    <div class="row mb-5">
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                <div class="card-body text-center">
+                    <i class="bi bi-geo-alt-fill text-primary" style="font-size: 3rem;"></i>
+                    <h5 class="card-title mt-3">Location-Based Tracking</h5>
+                    <p class="card-text">Find and track casinos using Google Maps integration. Identify nearby casinos based on your location.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                <div class="card-body text-center">
+                    <i class="bi bi-calendar-check-fill text-success" style="font-size: 3rem;"></i>
+                    <h5 class="card-title mt-3">Session Management</h5>
+                    <p class="card-text">Create betting sessions at each casino location. Track multiple bets per session with detailed statistics.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                <div class="card-body text-center">
+                    <i class="bi bi-graph-up-arrow text-info" style="font-size: 3rem;"></i>
+                    <h5 class="card-title mt-3">Performance Analytics</h5>
+                    <p class="card-text">View your betting history, track winnings and losses, and analyze your performance over time.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-5">
+        <div class="col-md-6 mb-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title"><i class="bi bi-shield-check"></i> Secure Authentication</h5>
+                    <p class="card-text">
+                        Sign in securely using:
+                    </p>
+                    <ul>
+                        <li><i class="bi bi-envelope"></i> Email and Password</li>
+                        <li><i class="bi bi-google"></i> Google OAuth</li>
+                        <li><i class="bi bi-facebook"></i> Facebook OAuth</li>
+                        <li><i class="bi bi-apple"></i> Apple Sign In (Ready)</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 mb-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title"><i class="bi bi-phone"></i> Cross-Platform Access</h5>
+                    <p class="card-text">
+                        Access your betting journal from anywhere:
+                    </p>
+                    <ul>
+                        <li><i class="bi bi-apple"></i> iOS devices (Safari, Chrome)</li>
+                        <li><i class="bi bi-android2"></i> Android devices (Chrome, Firefox)</li>
+                        <li><i class="bi bi-laptop"></i> Desktop browsers (Windows, Mac, Linux)</li>
+                        <li><i class="bi bi-tablet"></i> Tablets and mobile devices</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-5">
+        <div class="col-12">
+            <div class="card bg-primary text-white">
+                <div class="card-body text-center">
+                    <h4><i class="bi bi-database"></i> MySQL Database with Devart Connector</h4>
+                    <p class="mb-0">Reliable, enterprise-grade data storage for all your betting records</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @if (User.Identity?.IsAuthenticated != true)
+    {
+        <div class="row">
+            <div class="col-12 text-center">
+                <h3 class="mb-4">Ready to get started?</h3>
+                <a class="btn btn-primary btn-lg" asp-controller="Account" asp-action="Register">
+                    <i class="bi bi-person-plus"></i> Create Your Free Account
+                </a>
+            </div>
+        </div>
+    }
 </div>
+
